@@ -4,6 +4,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
 }
 
 kotlin {
@@ -11,12 +12,20 @@ kotlin {
     js {
         browser
     }
+    macosX64("macos") {
+        compilations["main"].enableEndorsedLibs = true
+        binaries {
+            executable("parsePng") {
+                entryPoint = "com.example.png.main"
+            }
+        }
+    }
 
     sourceSets {
         commonMain {
             dependencies {
-                api(kotlin("stdlib-common"))
-                api("com.squareup.okio:okio-multiplatform:2.4.2")
+                implementation(kotlin("stdlib-common"))
+                implementation("com.squareup.okio:okio-multiplatform:2.4.3")
             }
         }
         commonTest {
@@ -47,4 +56,17 @@ kotlin {
             }
         }
     }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    println(this.name)
+    kotlinOptions.freeCompilerArgs += listOf(
+        "-Xuse-experimental=kotlin.Experimental",
+        "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes",
+        "-Xuse-experimental=kotlinx.cli.ExperimentalCli",
+        "-XXLanguage:+InlineClasses",
+        "-Xmulti-platform",
+        "-Xuse-experimental=kotlinx.cli.ExperimentalCli",
+        "-Xuse-experimental=kotlin.ExperimentalMultiplatform"
+    )
 }

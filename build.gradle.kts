@@ -4,13 +4,18 @@ plugins {
 
 repositories {
     mavenCentral()
+    jcenter()
     maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
+    maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers/")
+    maven(url = "https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
 kotlin {
     jvm()
     js {
-        browser
+        browser {
+
+        }
     }
     macosX64("macos") {
         compilations["main"].enableEndorsedLibs = true
@@ -37,7 +42,7 @@ kotlin {
 
         jvm().compilations["main"].defaultSourceSet {
             dependencies {
-                api(kotlin("stdlib-jdk8"))
+                implementation(kotlin("stdlib-jdk8"))
             }
         }
         jvm().compilations["test"].defaultSourceSet {
@@ -47,12 +52,20 @@ kotlin {
         }
         js().compilations["main"].defaultSourceSet {
             dependencies {
-                api(kotlin("stdlib-js"))
+                implementation(kotlin("stdlib-js"))
+
+                implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.6.12")
+                implementation("org.jetbrains:kotlin-react:16.9.0-pre.89-kotlin-1.3.60")
+                implementation("org.jetbrains:kotlin-react-dom:16.9.0-pre.89-kotlin-1.3.60")
+                implementation(npm("react", "16.12.0"))
+                implementation(npm("react-dom", "16.12.0"))
             }
         }
         js().compilations["test"].defaultSourceSet {
             dependencies {
                 implementation(kotlin("test-js"))
+
+
             }
         }
     }
